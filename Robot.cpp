@@ -1,5 +1,5 @@
 #include "Robot.h"
-
+//initialize encoders and motors
 Encoder enc1(20, 21);
 Encoder enc2(22, 23);
 Encoder enc3(24, 25);
