@@ -5,7 +5,14 @@
 */
 
 
+//#include "TimerOne.h"
+//#include "JointMotor.h"
+//#include "Gripper.h"
+//#include "Button.h"
+//#include "ams_as5048b.h"
+#include <Wire.h>
 #include "Robot.h"
+#include <Arduino.h>
 
 Robot robot;
 
@@ -17,12 +24,19 @@ double out_x = 10;
 
 void setup()
 {
+	Serial.begin(9600); 
+
+	Serial.println("begin");
+
+//	Wire.begin(); //begin I2C
 }
 
 void loop()
 {
-	robot.move_robot(home_x, home_y, home_z, PI, 0); // home
-	robot.move_robot(home_x, home_y, up_z, PI, 0); // up
-	robot.move_robot(out_x, home_y, up_z, PI, 0); // out
-	robot.move_robot(out_x, home_y, home_z, PI, 0); // down
+	Serial.println("in loop");
+//	robot.move_robot(home_x, home_y, home_z, PI, 0); // home
+//	robot.move_robot(home_x, home_y, up_z, PI, 0); // up
+//	robot.move_robot(out_x, home_y, up_z, PI, 0); // out
+//	robot.move_robot(out_x, home_y, home_z, PI, 0); // down
+//	while (1);
 }

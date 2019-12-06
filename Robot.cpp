@@ -1,25 +1,19 @@
 #include "Robot.h"
 //initialize encoders and motors
-Encoder enc1(20, 21);
-Encoder enc2(22, 23);
-Encoder enc3(24, 25);
-Encoder enc4(26, 27);
-Encoder enc5(28, 29);
+JointMotor jointMotor[3];
+Gripper gripper[2];
 
-Servo motor1;
-Servo motor2;
-Servo motor3;
-Servo motor4;
-Servo motor5;
 
 Robot::Robot() {
-	motor1.attach(1);
-	motor2.attach(2);
-	motor3.attach(3);
-	motor4.attach(4);
-	motor5.attach(5);
-	}
+	jointMotor[0] = JointMotor(JOINT_MOTOR1_1, JOINT_MOTOR1_2, JOINT_MOTOR1_PWM, JOINT_MOTOR1_ADR, 100, 0.1, 50, 10, 0.1, 5, 27.81);
+	jointMotor[1] = JointMotor(JOINT_MOTOR2_1, JOINT_MOTOR2_2, JOINT_MOTOR2_PWM, JOINT_MOTOR2_ADR, 120, 0.1, 60, 124.38);
+	jointMotor[2] = JointMotor(JOINT_MOTOR3_1, JOINT_MOTOR3_2, JOINT_MOTOR3_PWM, JOINT_MOTOR3_ADR, 10, 0.1, 5, 100, 0.1, 60, 27.81);
+	gripper[0] = Gripper(GRIPPER_MOTOR_1, true);
+	gripper[1] = Gripper(GRIPPER_MOTOR_2, false);
+}
+
 	void Robot::move_robot(double xd, double yd, double zd, double thd, double phid) {
+		Serial.println("in move_robot");
 		double start_t = millis()/1000.0; // movement start time, in seconds
 		double travel_time = 3; // travel time, in seconds
 		double end_t = start_t + travel_time; // movement end time, in seconds
@@ -54,6 +48,17 @@ Robot::Robot() {
 		double last_e_q5 = 0;
 		double last_t = 0; // last time through controller
 
+		while (1) {
+			double ang2 = joint_angle_rad(2);
+			double ang3 = joint_angle_rad(3);
+			double ang4 = joint_angle_rad(4);
+			Serial.print(ang2);
+			Serial.print("  ");
+			Serial.print(ang3);
+			Serial.print("  ");
+			Serial.println(ang4);
+		}
+
 		while (millis()/1000.0 <= end_t) {
 			t = (millis()/1000.0 - start_t);
 
@@ -61,7 +66,7 @@ Robot::Robot() {
 			yt = trajectory(t, y_coeffmat);
 			zt = trajectory(t, z_coeffmat);
 			tht = trajectory(t, th_coeffmat);
-			phit = trajectory(t, phi_coeffmat);
+			phit = trajectory(t, phi_coeffmat);			
 
 			controller_vals controller_return = controller(xt, yt, zt, tht, phit, &last_e_q1, &last_e_q2, &last_e_q3, &last_e_q4, &last_e_q5, &last_t);
 
@@ -87,19 +92,19 @@ Robot::Robot() {
 		double de_4 = (e_q4 - *last_e_q4) / ((millis() / 1000.0) - *last_t);
 		double de_5 = (e_q5 - *last_e_q5) / ((millis() / 1000.0) - *last_t);
 
-		double kp1 = 1;
+		double kp1 = 10;
 		double kd1 = 1;
 
-		double kp2 = 1;
+		double kp2 = 10;
 		double kd2 = 1;
 
-		double kp3 = 1;
+		double kp3 = 10;
 		double kd3 = 1;
 
-		double kp4 = 1;
+		double kp4 = 10;
 		double kd4 = 1;
 
-		double kp5 = 1;
+		double kp5 = 10;
 		double kd5 = 1;
 
 		double tau1 = kp1 * e_q1 + kd1 * de_1;
@@ -128,17 +133,9 @@ Robot::Robot() {
 
 	void Robot::move_motors(controller_vals tau) {
 
-		int tau1 = map_servo_input(tau.tau1);
-		int tau2 = map_servo_input(tau.tau2);
-		int tau3 = map_servo_input(tau.tau3);
-		int tau4 = map_servo_input(tau.tau4);
-		int tau5 = map_servo_input(tau.tau5);
-
-		motor1.write(tau1);
-		motor2.write(tau2);
-		motor3.write(tau3);
-		motor4.write(tau4);
-		motor5.write(tau5);
+		jointMotor[0].setSpeed(tau.tau2);
+		jointMotor[1].setSpeed(tau.tau3);
+		jointMotor[2].setSpeed(tau.tau4);
 
 		return;
 	}
@@ -289,37 +286,37 @@ Robot::Robot() {
 
 	//returns joint angle, in radians, of specified joint. 
 	double Robot::joint_angle_rad(int joint) {
-		double enc_to_rad = 1;
-		double enc1_offset = 0;
-		double enc2_offset = 0;
-		double enc3_offset = 0;
-		double enc4_offset = 0;
-		double enc5_offset = 0;
+		double rad1 = 0;
 
-		long enc_val;
-		double q;
+		double deg2 = jointMotor[0].getAngleDegrees();
+		double rad2 = deg2 * (PI / 180.0);
 		
+		double deg3 = jointMotor[1].getAngleDegrees();
+		double rad3 = deg3 * (PI / 180.0);
+
+		double deg4 = jointMotor[2].getAngleDegrees();
+		double rad4 = deg4 * (PI / 180.0);
+
+		double rad5 = 0;
+
+		double q;
+
 		switch (joint)
 		{
 		case 1:
-			enc_val = enc1.read();
-			q = enc_val * enc_to_rad + enc1_offset;
+			q = rad1;
 			break;
 		case 2:
-			enc_val = enc2.read();
-			q = enc_val * enc_to_rad + enc2_offset;
+			q = rad2;
 			break;
 		case 3:
-			enc_val = enc3.read();
-			q = enc_val * enc_to_rad + enc3_offset;
+			q = rad3;
 			break;
 		case 4:
-			enc_val = enc4.read();
-			q = enc_val * enc_to_rad + enc4_offset;
+			q = rad4;
 			break;
 		case 5:
-			enc_val = enc5.read();
-			q = enc_val * enc_to_rad + enc5_offset;
+			q = rad5;
 			break;
 		}
 		

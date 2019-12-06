@@ -11,14 +11,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Encoder-0.0.0", "Libraries\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Servo-1.1.2", "Libraries\Servo\1.1.2\Servo\Servo-1.1.2.vcxitems", "{84263BA2-549D-4693-84B4-28E8C29EF32A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wire-1.0", "Libraries\Wire\1.0\Wire\Wire-1.0.vcxitems", "{F97F3AD9-C646-4A93-AB0A-B02D758A3499}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Libraries\Servo\1.1.2\Servo\Servo-1.1.2.vcxitems*{84263ba2-549d-4693-84b4-28e8c29ef32a}*SharedItemsImports = 9
 		Libraries\Encoder\0.0.0\Encoder\Encoder-0.0.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
 		Libraries\Matrix-1.2\0.0.0\Matrix-1.2\Matrix-1.2-0.0.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
 		Libraries\Servo\1.1.2\Servo\Servo-1.1.2.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\Wire\1.0\Wire\Wire-1.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
 		Libraries\Matrix-1.2\0.0.0\Matrix-1.2\Matrix-1.2-0.0.0.vcxitems*{c6828a67-6323-421a-98ec-3d2e734b70ee}*SharedItemsImports = 9
 		Libraries\Encoder\0.0.0\Encoder\Encoder-0.0.0.vcxitems*{c93efeb6-ee63-4de6-a5cf-f0c7a67efddb}*SharedItemsImports = 9
+		Libraries\Wire\1.0\Wire\Wire-1.0.vcxitems*{f97f3ad9-c646-4a93-ab0a-b02d758a3499}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

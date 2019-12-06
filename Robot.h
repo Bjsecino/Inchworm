@@ -15,6 +15,11 @@
 #include <Servo.h>
 #include "Trajectory.h"
 #include "Kinematics.h"
+#include "Gripper.h"
+#include "JointMotor.h"
+#include <Wire.h>
+#include "pins.h"
+
 
 struct controller_vals
 {
