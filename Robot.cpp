@@ -1,16 +1,21 @@
 #include "Robot.h"
 //initialize encoders and motors
-JointMotor jointMotor[3];
-Gripper gripper[2];
 
 
-Robot::Robot() {
-	jointMotor[0] = JointMotor(JOINT_MOTOR1_1, JOINT_MOTOR1_2, JOINT_MOTOR1_PWM, JOINT_MOTOR1_ADR, 100, 0.1, 50, 10, 0.1, 5, 27.81);
-	jointMotor[1] = JointMotor(JOINT_MOTOR2_1, JOINT_MOTOR2_2, JOINT_MOTOR2_PWM, JOINT_MOTOR2_ADR, 120, 0.1, 60, 124.38);
-	jointMotor[2] = JointMotor(JOINT_MOTOR3_1, JOINT_MOTOR3_2, JOINT_MOTOR3_PWM, JOINT_MOTOR3_ADR, 10, 0.1, 5, 100, 0.1, 60, 27.81);
-	gripper[0] = Gripper(GRIPPER_MOTOR_1, true);
-	gripper[1] = Gripper(GRIPPER_MOTOR_2, false);
-}
+
+Robot::Robot() {}
+
+	void Robot::init() {
+		Serial.println("in init");
+		jointMotor[0] = JointMotor(JOINT_MOTOR1_1, JOINT_MOTOR1_2, JOINT_MOTOR1_PWM, JOINT_MOTOR1_ADR, 100, 0.1, 50, 10, 0.1, 5, 27.81);
+		Serial.println("initialized jointMotor[0]");
+		jointMotor[1] = JointMotor(JOINT_MOTOR2_1, JOINT_MOTOR2_2, JOINT_MOTOR2_PWM, JOINT_MOTOR2_ADR, 120, 0.1, 60, 124.38);
+		Serial.println("initialized jointMotor[1]");
+		jointMotor[2] = JointMotor(JOINT_MOTOR3_1, JOINT_MOTOR3_2, JOINT_MOTOR3_PWM, JOINT_MOTOR3_ADR, 10, 0.1, 5, 100, 0.1, 60, 27.81);
+		Serial.println("initialized jointMotor[2]");
+		gripper[0] = Gripper(GRIPPER_MOTOR_1, true);
+		gripper[1] = Gripper(GRIPPER_MOTOR_2, false);
+	}
 
 	void Robot::move_robot(double xd, double yd, double zd, double thd, double phid) {
 		Serial.println("in move_robot");

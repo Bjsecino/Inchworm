@@ -54,6 +54,7 @@ class Robot
 {
 public:
 	Robot();
+	void init();
 	void move_robot(double xd, double yd, double zd, double thd, double phid);
 
 private:
@@ -65,6 +66,9 @@ private:
 	task_space_vals fwkin();
 	double joint_angle_rad(int joint);
 	int map_servo_input(double input);
+
+	JointMotor jointMotor[3];
+	Gripper gripper[2];
 };
 
 #endif

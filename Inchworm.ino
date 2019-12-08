@@ -10,7 +10,7 @@
 //#include "Gripper.h"
 //#include "Button.h"
 //#include "ams_as5048b.h"
-#include <Wire.h>
+//#include <Wire.h>
 #include "Robot.h"
 #include <Arduino.h>
 
@@ -25,8 +25,9 @@ double out_x = 10;
 void setup()
 {
 	Serial.begin(9600); 
-
 	Serial.println("begin");
+
+	robot.init();
 
 //	Wire.begin(); //begin I2C
 }
