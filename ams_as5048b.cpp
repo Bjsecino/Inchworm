@@ -71,7 +71,6 @@ void AMS_AS5048B::begin(void) {
 	_lastAngleRaw = 0.0;
 
 	_zeroRegVal = AMS_AS5048B::zeroRegR();
-	Serial.println("past everything");
 	_addressRegVal = AMS_AS5048B::addressRegR();
 
 	AMS_AS5048B::resetMovingAvgExp();

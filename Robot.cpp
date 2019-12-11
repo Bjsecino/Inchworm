@@ -6,37 +6,83 @@
 Robot::Robot() {}
 
 	void Robot::init() {
-		Serial.println("in init");
-		jointMotor[0] = JointMotor(JOINT_MOTOR1_1, JOINT_MOTOR1_2, JOINT_MOTOR1_PWM, JOINT_MOTOR1_ADR, 100, 0.1, 50, 10, 0.1, 5, 27.81);
-		Serial.println("initialized jointMotor[0]");
-		jointMotor[1] = JointMotor(JOINT_MOTOR2_1, JOINT_MOTOR2_2, JOINT_MOTOR2_PWM, JOINT_MOTOR2_ADR, 120, 0.1, 60, 124.38);
-		Serial.println("initialized jointMotor[1]");
-		jointMotor[2] = JointMotor(JOINT_MOTOR3_1, JOINT_MOTOR3_2, JOINT_MOTOR3_PWM, JOINT_MOTOR3_ADR, 10, 0.1, 5, 100, 0.1, 60, 27.81);
-		Serial.println("initialized jointMotor[2]");
+		jointMotor[0] = JointMotor(JOINT_MOTOR1_1, JOINT_MOTOR1_2, JOINT_MOTOR1_PWM, JOINT_MOTOR1_ADR, 100, 0.1, 50, 10, 0.1, 5, 27.81, 1);
+		jointMotor[1] = JointMotor(JOINT_MOTOR2_1, JOINT_MOTOR2_2, JOINT_MOTOR2_PWM, JOINT_MOTOR2_ADR, 120, 0.1, 60, 124.38, 1);
+		jointMotor[2] = JointMotor(JOINT_MOTOR3_1, JOINT_MOTOR3_2, JOINT_MOTOR3_PWM, JOINT_MOTOR3_ADR, 10, 0.1, 5, 100, 0.1, 60, 27.81, 0);
 		gripper[0] = Gripper(GRIPPER_MOTOR_1, true);
 		gripper[1] = Gripper(GRIPPER_MOTOR_2, false);
 	}
 
 	void Robot::move_robot(double xd, double yd, double zd, double thd, double phid) {
 		Serial.println("in move_robot");
+
+		//while (1) {
+		//	double ang2 = joint_angle_rad(2);
+		//	double ang3 = joint_angle_rad(3);
+		//	double ang4 = joint_angle_rad(4);
+
+		//	Serial.print(String(ang2));
+		//	Serial.print("  ");
+		//	Serial.print(String(ang3));
+		//	Serial.print("  ");
+		//	Serial.println(String(ang4));
+		//}
+
 		double start_t = millis()/1000.0; // movement start time, in seconds
 		double travel_time = 3; // travel time, in seconds
 		double end_t = start_t + travel_time; // movement end time, in seconds
 
 		double xi, yi, zi, thi, phii; // initial task space positions tip position x y z theta phi in inches and radians
-		task_space_vals start_task_space = fwkin();
-		xi = start_task_space.x;
-		yi = start_task_space.y;
-		zi = start_task_space.z;
-		thi = start_task_space.th;
-		phii = start_task_space.phi;
+
+		//while (1) {
+			task_space_vals start_task_space = fwkin();
+			xi = start_task_space.x;
+			yi = start_task_space.y;
+			zi = start_task_space.z;
+			thi = start_task_space.th;
+			phii = start_task_space.phi;
+			//Serial.println(String(xi) + "  " + String(yi) + "  " + String(zi) + "  " + String(thi) + "  " + String(phii));
+		//}
 
 		// quintic trajectory matricies
-		Matrix<double> x_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, xi, xd);
-		Matrix<double> y_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, yi, yd);
-		Matrix<double> z_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, zi, zd);
-		Matrix<double> th_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, thi, thd);
-		Matrix<double> phi_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, phii, phid);
+			//Matrix<double> x_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, xi, xd);
+
+			double x_array[6][1] = { {6}, {0},{0}, {0}, {0}, {0} };
+			Matrix<double> x_coeffmat(6, 1, (double*)x_array);
+
+			Serial.println("after x");
+
+
+			//Matrix<double> z_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, zi, zd);
+
+
+			double z_array[6][1] = { {0}, {0},{0}, {1.11111}, {-0.5555556}, {0.0741} };
+			Matrix<double> z_coeffmat(6, 1, (double*)z_array);
+
+			Serial.println("after z");
+
+
+			//Matrix<double> th_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, thi, thd);
+
+			double th_array[6][1] = { {PI}, {0},{0}, {0}, {0}, {0} };
+			Matrix<double> th_coeffmat(6, 1, (double*)th_array);
+
+			Serial.println("after th");
+
+
+			double y_array[6][1] = { {0}, {0},{0}, {0}, {0}, {0} };
+			Matrix<double> y_coeffmat(6, 1, (double*)y_array);
+
+			Serial.println("after y");
+
+
+			double phi_array[6][1] = { {0}, {0},{0}, {0}, {0}, {0} };
+			Matrix<double> phi_coeffmat(6, 1, (double*)phi_array);
+			Serial.println("after phi");
+
+
+			//Matrix<double> y_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, yi, yd);
+			//Matrix<double> phi_coeffmat = quinticTrajectory(start_t, end_t, 0, 0, 0, 0, phii, phid);
 
 		trajectory_vals xt;
 		trajectory_vals yt;
@@ -53,18 +99,16 @@ Robot::Robot() {}
 		double last_e_q5 = 0;
 		double last_t = 0; // last time through controller
 
-		while (1) {
+
+		Serial.println("ready to loop");
+
+		while (millis()/1000.0 <= end_t) {
+
 			double ang2 = joint_angle_rad(2);
 			double ang3 = joint_angle_rad(3);
 			double ang4 = joint_angle_rad(4);
-			Serial.print(ang2);
-			Serial.print("  ");
-			Serial.print(ang3);
-			Serial.print("  ");
-			Serial.println(ang4);
-		}
 
-		while (millis()/1000.0 <= end_t) {
+
 			t = (millis()/1000.0 - start_t);
 
 			xt = trajectory(t, x_coeffmat);
@@ -75,7 +119,7 @@ Robot::Robot() {}
 
 			controller_vals controller_return = controller(xt, yt, zt, tht, phit, &last_e_q1, &last_e_q2, &last_e_q3, &last_e_q4, &last_e_q5, &last_t);
 
-			move_motors(controller_return);
+			//move_motors(controller_return);
 		}
 		return;
 	}
@@ -83,9 +127,19 @@ Robot::Robot() {}
 	//todo add Gravity
 	controller_vals Robot::controller(trajectory_vals xd, trajectory_vals yd, trajectory_vals zd, trajectory_vals thd, trajectory_vals phid, double *last_e_q1, double *last_e_q2, double* last_e_q3, double* last_e_q4, double* last_e_q5, double *last_t) {
 		joint_p_v_a qd = ikin(xd, yd, zd, thd, phid);
-		joint_p_v_a q = curr_joint_vals();
+		//joint_p_v_a q = curr_joint_vals();
 
-		double e_q1 = qd.q1 - q.q1;
+		Serial.println(String(qd.q2) + "  " + String(qd.q3) + "  " + String(qd.q4));
+
+		jointMotor[0].setAngle(qd.q2 * (180.0 / PI));
+		jointMotor[1].setAngle(qd.q3 * (180.0 / PI));
+		jointMotor[2].setAngle(qd.q4 * (180.0 / PI));
+
+		jointMotor[0].updateSpeed();
+		jointMotor[1].updateSpeed();
+		jointMotor[2].updateSpeed();
+
+		/*double e_q1 = qd.q1 - q.q1;
 		double e_q2 = qd.q2 - q.q2;
 		double e_q3 = qd.q3 - q.q3;
 		double e_q4 = qd.q4 - q.q4;
@@ -125,13 +179,15 @@ Robot::Robot() {}
 		*last_e_q5 = e_q5;
 
 		*last_t = millis() / 1000.0;
+		*/
 
 		controller_vals return_val;
-		return_val.tau1 = tau1;
+		/*return_val.tau1 = tau1;
 		return_val.tau2 = tau2;
 		return_val.tau3 = tau3;
 		return_val.tau4 = tau4;
 		return_val.tau5 = tau5;
+		*/
 
 		return return_val;
 	}
@@ -294,13 +350,13 @@ Robot::Robot() {}
 		double rad1 = 0;
 
 		double deg2 = jointMotor[0].getAngleDegrees();
-		double rad2 = deg2 * (PI / 180.0);
+		double rad2 = deg2 *(PI / 180.0);
 		
 		double deg3 = jointMotor[1].getAngleDegrees();
-		double rad3 = deg3 * (PI / 180.0);
+		double rad3 = deg3 *(PI / 180.0);
 
 		double deg4 = jointMotor[2].getAngleDegrees();
-		double rad4 = deg4 * (PI / 180.0);
+		double rad4 = deg4 *(PI / 180.0);
 
 		double rad5 = 0;
 

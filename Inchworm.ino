@@ -25,19 +25,18 @@ double out_x = 10;
 void setup()
 {
 	Serial.begin(9600); 
-	Serial.println("begin");
+
+	Wire.begin(); //begin I2C
 
 	robot.init();
 
-//	Wire.begin(); //begin I2C
 }
 
 void loop()
 {
-	Serial.println("in loop");
-//	robot.move_robot(home_x, home_y, home_z, PI, 0); // home
+	robot.move_robot(home_x, home_y, home_z, PI, 0); // home
 //	robot.move_robot(home_x, home_y, up_z, PI, 0); // up
 //	robot.move_robot(out_x, home_y, up_z, PI, 0); // out
 //	robot.move_robot(out_x, home_y, home_z, PI, 0); // down
-//	while (1);
+	while (1);
 }

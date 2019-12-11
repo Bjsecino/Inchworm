@@ -4,7 +4,7 @@
 JointMotor::JointMotor() {
 }
 
-JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int encoderAddress, double kp, double ki, double kd, double ang_offset) {
+JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int encoderAddress, double kp, double ki, double kd, double ang_offset, bool encoder_clockwise) {
 	//Pin Configuration
 	pinDirectionA = pinDirectionA1;
 	pinDirectionB = pinDirectionB1;
@@ -26,12 +26,13 @@ JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int 
 	kD2 = kd;
 
 	angle_offset = ang_offset;
+	enc_clockwise = encoder_clockwise;
+	encoder.setClockWise(enc_clockwise);
 
 	debug = false;
 }
-JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int encoderAddress, double kp, double ki, double kd, double kp2, double ki2, double kd2, double ang_offset) {
+JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int encoderAddress, double kp, double ki, double kd, double kp2, double ki2, double kd2, double ang_offset, bool encoder_clockwise) {
 	//Pin Configuration
-	Serial.println("in jointMotor");
 
 	pinDirectionA = pinDirectionA1;
 	pinDirectionB = pinDirectionB1;
@@ -40,14 +41,11 @@ JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int 
 	pinMode(pinDirectionB, OUTPUT);
 	pinMode(pinPWM, OUTPUT);
 
-	Serial.println("declared pins");
 	//Encoder Setup
 	encoder = AMS_AS5048B(encoderAddress);
-	Serial.println("created encoder object");
 
 	encoder.begin(); //Encoder Constructor
 
-	Serial.println("begin encoder");
 	encoder.setZeroReg(); //Zero Encoders
 
 
@@ -61,6 +59,8 @@ JointMotor::JointMotor(int pinDirectionA1, int pinDirectionB1, int pinPWM1, int 
 	kD2 = kd2;
 
 	angle_offset = ang_offset;
+	enc_clockwise = encoder_clockwise;
+	encoder.setClockWise(enc_clockwise);
 
 	debug = false;
 }

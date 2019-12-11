@@ -18,7 +18,7 @@ task_space_vals forward_kinematics(double q1, double q2, double q3, double q4, d
 	double mag_z0 = 1; // always equal to 1 because of rotation matrix definition
 	double mag_z5 = 1;
 
-	double theta = acos(z0_dot_z5 / (mag_z0 * mag_z5));
+	double theta = acos(z0_dot_z5 / (mag_z0 * mag_z5)) + PI/2.0;
 
 	double phi = q5;
 
